@@ -6,6 +6,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import utils.FileWriterClass;
 import webpages.Homepage;
 
 import java.util.concurrent.TimeUnit;
@@ -17,17 +18,31 @@ public class AutomateSubmissionsTest {
 
     WebDriver driver;
 
+    FileWriterClass fileWriterClass = new FileWriterClass();
+
     @Before
     public void setup() {
-        System.setProperty("webdriver.chrome.driver", "C:\\chromedriver\\chromedriver.exe");
+        System.setProperty("webdriver.chrome.driver", "/usr/local/bin/chromedriver");
         driver = new ChromeDriver();
         driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
     }
 
     @Test
-    public void automateSubmission() {
+    public void automateGettingQuestions() {
         Homepage homepage = new Homepage(driver);
+        automatePage(homepage);
+        while (homepage.isQuestionPage()) {
+            String title = homepage.getQuestionTitle();
+            String question = homepage.getQuestion();
+            String example = homepage.getQuestionExample();
 
+            fileWriterClass.WriteFileToPath(title, question, example);
+
+            homepage.clickSkipQuestionBtn();
+        }
+    }
+
+    private void automatePage(Homepage homepage) {
         //check if is homepage
         Assert.assertTrue(homepage.isHomePage());
 
@@ -38,11 +53,16 @@ public class AutomateSubmissionsTest {
         Assert.assertTrue(homepage.modalPopsUp());
 
         //check if it needs login
-        if (homepage.needsLogin())
+        if (homepage.needsLogin()) {
             homepage.clickOnLoginBtn();
-        else homepage.clickOnModalStartChallengeButton();
+            if (homepage.isGithubLoginPage()) {
+                homepage.setGithubUsername("rideveloper");
+                homepage.setGithubPassword("Safiat295");
+                homepage.clickOnGithubLoginBtn();
+            }
+        }
 
-
+        homepage.clickOnModalStartChallengeButton();
     }
 
     @After

@@ -31,6 +31,34 @@ public class Homepage {
     @FindBy(how = How.XPATH, using = "//*[@id=\"modal-host\"]/div/div/div[3]/div/button[2]")
     private WebElement loginWithGithubBtn;
 
+    @FindBy(how = How.XPATH, using = "//*[@id=\"login\"]/div[3]/div/p")
+    private WebElement githubLoginHeader;
+
+    @FindBy(how = How.XPATH, using = "//*[@id=\"login_field\"]")
+    private WebElement githubUsername;
+
+    @FindBy(how = How.XPATH, using = "//*[@id=\"password\"]")
+    private WebElement githubPassword;
+
+    @FindBy(how = How.XPATH, using = "//*[@id=\"login\"]/div[3]/form/div/input[12]")
+    private WebElement githubLogin;
+
+    @FindBy(how = How.XPATH, using = "//*[@id=\"page_react_container\"]/div/div[2]/div[3]")
+    private WebElement questionPageTag;
+
+    @FindBy(how = How.XPATH, using = "//*[@id=\"AceEditorTask107\"]/div[2]/div/div[3]/div[1]")
+    private WebElement questionTitle;
+
+    @FindBy(how = How.XPATH, using = "//*[@id=\"page_react_container\"]/div/p")
+    private WebElement questionText;
+
+    @FindBy(how = How.XPATH, using = "//*[@id=\"AceEditorTask107\"]/div[2]/div/div[3]")
+    private WebElement questionExample;
+
+    @FindBy(how = How.XPATH, using = "//*[@id=\"page_react_container\"]/div/div[3]/div[3]/a[2]")
+    private WebElement skipQuestionBtn;
+
+
     public boolean isHomePage() {
         return homePageHeader.getText().contains("The 2021 Toptal JavaScript Speed Coding Challenge");
     }
@@ -41,6 +69,14 @@ public class Homepage {
 
     public boolean needsLogin() {
         return modalH2.getText().contains("Please log in to start:");
+    }
+
+    public boolean isGithubLoginPage() {
+        return githubLoginHeader.getText().contains("Sign in to GitHub");
+    }
+
+    public boolean isQuestionPage() {
+        return questionPageTag.getText().contains("Total Score");
     }
 
     //Constructor
@@ -62,4 +98,35 @@ public class Homepage {
     public void clickOnLoginBtn() {
         loginWithGithubBtn.click();
     }
+
+    public void clickOnGithubLoginBtn() {
+        githubLogin.click();
+    }
+
+    public void setGithubUsername(String email){
+        githubUsername.clear();
+        githubUsername.sendKeys(email);
+    }
+
+    public void setGithubPassword(String password){
+        githubPassword.clear();
+        githubPassword.sendKeys(password);
+    }
+
+    public String getQuestionTitle() {
+        return questionTitle.getText().split(" = ")[0];
+    }
+
+    public String getQuestion() {
+        return questionText.getText();
+    }
+
+    public String getQuestionExample() {
+        return questionExample.getText();
+    }
+
+    public void clickSkipQuestionBtn() {
+        skipQuestionBtn.click();
+    }
+
 }
